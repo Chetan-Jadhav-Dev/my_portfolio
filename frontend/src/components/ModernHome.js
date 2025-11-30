@@ -4,39 +4,20 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { 
-  FaGithub, FaLinkedin, FaEnvelope, FaCode, FaRocket, FaPython, FaJava, FaAws, FaDocker
+  FaGithub, FaLinkedin, FaEnvelope, FaRocket
 } from 'react-icons/fa';
 // FaRocket is used in ProjectCard component
-import { 
-  SiPython, SiScala, SiJavascript, SiReact, SiFlask,
-  SiSnowflake, SiDocker, SiKubernetes
-} from 'react-icons/si';
 import { trackPageView, trackSectionView, trackProjectClick, trackLinkClick } from '../utils/analytics';
 import Contact from './Contact';
+import DynamicIcon from './DynamicIcon';
 import './ModernHome.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
-// Icon mapping for skills - using only available icons
+// Icon component wrapper for skills - now supports all icons dynamically
 const getSkillIcon = (iconName) => {
-  const iconMap = {
-    'FaPython': FaPython,
-    'SiPython': SiPython,
-    'FaJava': FaJava,
-    'SiScala': SiScala,
-    'SiJavascript': SiJavascript,
-    'SiReact': SiReact,
-    'SiFlask': SiFlask,
-    'FaAws': FaAws,
-    'SiSnowflake': SiSnowflake,
-    'SiDocker': SiDocker,
-    'FaDocker': FaDocker,
-    'SiKubernetes': SiKubernetes,
-  };
-  
-  if (!iconName) return FaCode;
-  const IconComponent = iconMap[iconName] || FaCode;
-  return IconComponent;
+  // Return a component that uses DynamicIcon
+  return (props) => <DynamicIcon iconName={iconName} {...props} />;
 };
 
 function ModernHome() {
