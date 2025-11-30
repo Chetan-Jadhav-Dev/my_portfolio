@@ -8,7 +8,7 @@ with app.app_context():
     # Drop all tables and recreate
     db.drop_all()
     db.create_all()
-    
+
     # Create about entry
     default_about = About(
         name="Chetan Jadhav",
@@ -19,10 +19,10 @@ with app.app_context():
         linkedin_url="https://linkedin.com/in/jadhav-chetan",
         profile_image_url="https://via.placeholder.com/400x400/667eea/ffffff?text=CJ",
         hero_short_description="Passionate about building scalable data solutions and transforming complex data challenges into actionable insights. I specialize in cloud data engineering, ETL pipelines, and machine learning infrastructure.",
-        hero_top_skills="Python,SQL,ETL,DBT,Snowflake"
+        hero_top_skills="Python,SQL,ETL,DBT,Snowflake",
     )
     db.session.add(default_about)
-    
+
     # Create experience entries
     experiences = [
         Experience(
@@ -45,7 +45,7 @@ Key Responsibilities:
 
 Key Technologies: Python, AWS S3, AWS DynamoDB, Snowflake, Docker, Kubernetes, DBT, Kafka, Airflow, Terraform, Git Actions, Azure DataBricks, PySpark, Azure ML Studio, Flink""",
             technologies="Python,SQL,ETL,Airflow,Terraform,Git Actions,DBT,Azure DataBricks,Azure,Snowflake,PySpark,Azure ML Studio,Docker,Kubernetes,Kafka,Flink",
-            order=1
+            order=1,
         ),
         Experience(
             company="Deviahc Technologies Pvt Ltd",
@@ -66,15 +66,16 @@ Key Technologies: Python, AWS S3, AWS DynamoDB, Snowflake, Docker, Kubernetes, D
 
 Key Technologies: TensorFlow, OpenCV, MLFlow, SQL, AWS SageMaker, Apache Airflow, Python, RAG, Snowflake, Docker, Azure, AWS""",
             technologies="Python,TensorFlow,OpenCV,MLFlow,SQL,AWS SageMaker,Apache Airflow,RAG,Snowflake,Docker,Azure,AWS",
-            order=2
-        )
+            order=2,
+        ),
     ]
-    
+
     for exp in experiences:
         db.session.add(exp)
-    
+
     # Create sample projects
     import json
+
     sample_projects = [
         Project(
             title="Financial Data Pipeline Optimization",
@@ -94,11 +95,13 @@ The pipeline processes millions of financial transactions daily, ensuring data q
             github_url="https://github.com/chetan-jadhav/financial-pipeline",
             live_url="https://demo.example.com/financial-pipeline",
             image_url="https://via.placeholder.com/600x400/667eea/ffffff?text=Financial+Pipeline",
-            screenshots=json.dumps([
-                "https://via.placeholder.com/1200x800/667eea/ffffff?text=Screenshot+1",
-                "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Screenshot+2",
-                "https://via.placeholder.com/1200x800/667eea/ffffff?text=Screenshot+3"
-            ])
+            screenshots=json.dumps(
+                [
+                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Screenshot+1",
+                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Screenshot+2",
+                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Screenshot+3",
+                ]
+            ),
         ),
         Project(
             title="Zero-Downtime Deployment System",
@@ -118,10 +121,12 @@ This system reduced deployment time by 80% and eliminated production downtime du
             github_url="https://github.com/chetan-jadhav/zero-downtime-deployment",
             live_url="https://demo.example.com/deployment",
             image_url="https://via.placeholder.com/600x400/764ba2/ffffff?text=Deployment+System",
-            screenshots=json.dumps([
-                "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Deployment+Dashboard",
-                "https://via.placeholder.com/1200x800/667eea/ffffff?text=CI/CD+Pipeline"
-            ])
+            screenshots=json.dumps(
+                [
+                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Deployment+Dashboard",
+                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=CI/CD+Pipeline",
+                ]
+            ),
         ),
         Project(
             title="Advanced Analytics Integration - Loan Eligibility Prediction",
@@ -141,10 +146,12 @@ The system improved loan approval accuracy by 35% and reduced processing time by
             github_url="https://github.com/chetan-jadhav/loan-prediction",
             live_url="https://demo.example.com/loan-prediction",
             image_url="https://via.placeholder.com/600x400/667eea/ffffff?text=ML+Model",
-            screenshots=json.dumps([
-                "https://via.placeholder.com/1200x800/667eea/ffffff?text=Model+Dashboard",
-                "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Prediction+Results"
-            ])
+            screenshots=json.dumps(
+                [
+                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Model+Dashboard",
+                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Prediction+Results",
+                ]
+            ),
         ),
         Project(
             title="Car Damage Detection System",
@@ -164,10 +171,12 @@ The system reduced inspection time by 70% and improved accuracy by 25% compared 
             github_url="https://github.com/chetan-jadhav/car-damage-detection",
             live_url="https://demo.example.com/car-damage",
             image_url="https://via.placeholder.com/600x400/764ba2/ffffff?text=Car+Damage+AI",
-            screenshots=json.dumps([
-                "https://via.placeholder.com/1200x800/667eea/ffffff?text=Damage+Detection",
-                "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Analysis+Report"
-            ])
+            screenshots=json.dumps(
+                [
+                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Damage+Detection",
+                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Analysis+Report",
+                ]
+            ),
         ),
         Project(
             title="E-Commerce Chatbot with GPT-3.5",
@@ -187,55 +196,89 @@ The chatbot handles 80% of customer inquiries automatically, reducing support co
             github_url="https://github.com/chetan-jadhav/ecommerce-chatbot",
             live_url="https://demo.example.com/chatbot",
             image_url="https://via.placeholder.com/600x400/667eea/ffffff?text=Chatbot",
-            screenshots=json.dumps([
-                "https://via.placeholder.com/1200x800/667eea/ffffff?text=Chat+Interface",
-                "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Analytics+Dashboard"
-            ])
-        )
+            screenshots=json.dumps(
+                [
+                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Chat+Interface",
+                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Analytics+Dashboard",
+                ]
+            ),
+        ),
     ]
-    
+
     for project in sample_projects:
         db.session.add(project)
-    
+
     # Create skills with icons
     sample_skills = [
         # Programming Languages
-        Skill(name="Python", category="Programming Languages", proficiency=95, icon="FaPython"),
-        Skill(name="Java", category="Programming Languages", proficiency=85, icon="FaJava"),
-        Skill(name="Scala", category="Programming Languages", proficiency=80, icon="SiScala"),
-        Skill(name="JavaScript", category="Programming Languages", proficiency=75, icon="SiJavascript"),
-        Skill(name="SQL", category="Programming Languages", proficiency=90, icon="FaCode"),
-        
+        Skill(
+            name="Python",
+            category="Programming Languages",
+            proficiency=95,
+            icon="FaPython",
+        ),
+        Skill(
+            name="Java", category="Programming Languages", proficiency=85, icon="FaJava"
+        ),
+        Skill(
+            name="Scala",
+            category="Programming Languages",
+            proficiency=80,
+            icon="SiScala",
+        ),
+        Skill(
+            name="JavaScript",
+            category="Programming Languages",
+            proficiency=75,
+            icon="SiJavascript",
+        ),
+        Skill(
+            name="SQL", category="Programming Languages", proficiency=90, icon="FaCode"
+        ),
         # Frameworks & Libraries
         Skill(name="React", category="Frontend", proficiency=80, icon="SiReact"),
         Skill(name="Flask", category="Backend", proficiency=85, icon="SiFlask"),
         Skill(name="DBT", category="Data Tools", proficiency=90, icon="FaCode"),
-        Skill(name="Apache Airflow", category="Data Tools", proficiency=88, icon="FaCode"),
-        
+        Skill(
+            name="Apache Airflow", category="Data Tools", proficiency=88, icon="FaCode"
+        ),
         # Cloud & Infrastructure
         Skill(name="AWS", category="Cloud", proficiency=92, icon="FaAws"),
         Skill(name="Azure", category="Cloud", proficiency=85, icon="SiAzure"),
-        Skill(name="Snowflake", category="Database", proficiency=90, icon="SiSnowflake"),
+        Skill(
+            name="Snowflake", category="Database", proficiency=90, icon="SiSnowflake"
+        ),
         Skill(name="Docker", category="DevOps", proficiency=88, icon="FaDocker"),
-        Skill(name="Kubernetes", category="DevOps", proficiency=85, icon="SiKubernetes"),
+        Skill(
+            name="Kubernetes", category="DevOps", proficiency=85, icon="SiKubernetes"
+        ),
         Skill(name="Terraform", category="DevOps", proficiency=82, icon="FaCode"),
-        
         # Data & ML
-        Skill(name="Apache Kafka", category="Data Tools", proficiency=85, icon="FaCode"),
-        Skill(name="Apache Spark", category="Data Tools", proficiency=80, icon="FaCode"),
+        Skill(
+            name="Apache Kafka", category="Data Tools", proficiency=85, icon="FaCode"
+        ),
+        Skill(
+            name="Apache Spark", category="Data Tools", proficiency=80, icon="FaCode"
+        ),
         Skill(name="PySpark", category="Data Tools", proficiency=85, icon="FaCode"),
-        Skill(name="TensorFlow", category="Machine Learning", proficiency=80, icon="FaCode"),
-        Skill(name="MLflow", category="Machine Learning", proficiency=75, icon="FaCode"),
-        
+        Skill(
+            name="TensorFlow",
+            category="Machine Learning",
+            proficiency=80,
+            icon="FaCode",
+        ),
+        Skill(
+            name="MLflow", category="Machine Learning", proficiency=75, icon="FaCode"
+        ),
         # Other Tools
         Skill(name="Git", category="Tools", proficiency=90, icon="FaCode"),
         Skill(name="CI/CD", category="DevOps", proficiency=85, icon="FaCode"),
         Skill(name="Linux", category="Tools", proficiency=88, icon="FaCode"),
     ]
-    
+
     for skill in sample_skills:
         db.session.add(skill)
-    
+
     # Create sample blogs
     sample_blogs = [
         Blog(
@@ -288,7 +331,7 @@ my_project:
             tags="Data Engineering,Snowflake,DBT,ETL",
             reading_time=8,
             views=150,
-            published_at=datetime.utcnow() - timedelta(days=5)
+            published_at=datetime.utcnow() - timedelta(days=5),
         ),
         Blog(
             title="Zero-Downtime Deployments with Kubernetes",
@@ -349,7 +392,7 @@ spec:
             tags="Kubernetes,DevOps,Deployment,CI/CD",
             reading_time=6,
             views=98,
-            published_at=datetime.utcnow() - timedelta(days=3)
+            published_at=datetime.utcnow() - timedelta(days=3),
         ),
         Blog(
             title="Machine Learning Model Deployment with MLflow",
@@ -404,7 +447,7 @@ mlflow models deploy -m models:/Production/MyModel -t docker</code></pre>
             tags="Machine Learning,MLflow,Python,Deployment",
             reading_time=10,
             views=125,
-            published_at=datetime.utcnow() - timedelta(days=1)
+            published_at=datetime.utcnow() - timedelta(days=1),
         ),
         Blog(
             title="Building Real-Time Data Streams with Apache Kafka",
@@ -465,32 +508,41 @@ for message in consumer:
             tags="Kafka,Streaming,Real-time,Data Engineering",
             reading_time=7,
             views=87,
-            published_at=datetime.utcnow() - timedelta(days=2)
-        )
+            published_at=datetime.utcnow() - timedelta(days=2),
+        ),
     ]
-    
+
     for blog in sample_blogs:
         db.session.add(blog)
-    
+
     # Create sample analytics data
-    countries = ['United States', 'India', 'United Kingdom', 'Canada', 'Germany', 'Australia', 'France', 'Japan']
+    countries = [
+        "United States",
+        "India",
+        "United Kingdom",
+        "Canada",
+        "Germany",
+        "Australia",
+        "France",
+        "Japan",
+    ]
     cities = {
-        'United States': ['New York', 'San Francisco', 'Seattle', 'Austin'],
-        'India': ['Mumbai', 'Bangalore', 'Delhi', 'Pune'],
-        'United Kingdom': ['London', 'Manchester', 'Edinburgh'],
-        'Canada': ['Toronto', 'Vancouver', 'Montreal'],
-        'Germany': ['Berlin', 'Munich', 'Hamburg'],
-        'Australia': ['Sydney', 'Melbourne', 'Brisbane'],
-        'France': ['Paris', 'Lyon', 'Marseille'],
-        'Japan': ['Tokyo', 'Osaka', 'Kyoto']
+        "United States": ["New York", "San Francisco", "Seattle", "Austin"],
+        "India": ["Mumbai", "Bangalore", "Delhi", "Pune"],
+        "United Kingdom": ["London", "Manchester", "Edinburgh"],
+        "Canada": ["Toronto", "Vancouver", "Montreal"],
+        "Germany": ["Berlin", "Munich", "Hamburg"],
+        "Australia": ["Sydney", "Melbourne", "Brisbane"],
+        "France": ["Paris", "Lyon", "Marseille"],
+        "Japan": ["Tokyo", "Osaka", "Kyoto"],
     }
-    sections = ['about', 'projects', 'skills', 'experience', 'contact', 'github']
+    sections = ["about", "projects", "skills", "experience", "contact", "github"]
     project_names = [p.title for p in sample_projects]
-    
+
     # Generate analytics data for the last 30 days
     base_time = datetime.utcnow()
     session_ids = [str(uuid.uuid4()) for _ in range(50)]
-    
+
     for day in range(30):
         day_time = base_time - timedelta(days=day)
         for hour in range(24):
@@ -500,46 +552,46 @@ for message in consumer:
                 session_id = session_ids[day % len(session_ids)]
                 country = countries[day % len(countries)]
                 city = cities[country][day % len(cities[country])]
-                
+
                 analytics = Analytics(
                     session_id=session_id,
-                    event_type='page_view',
+                    event_type="page_view",
                     section=None,
                     ip_address=f"192.168.1.{day % 255}",
                     country=country,
                     city=city,
-                    timestamp=hour_time + timedelta(minutes=(day * 3) % 60)
+                    timestamp=hour_time + timedelta(minutes=(day * 3) % 60),
                 )
                 db.session.add(analytics)
-                
+
                 # Add section views
                 section = sections[day % len(sections)]
                 analytics_section = Analytics(
                     session_id=session_id,
-                    event_type='section_view',
+                    event_type="section_view",
                     section=section,
                     ip_address=f"192.168.1.{day % 255}",
                     country=country,
                     city=city,
-                    timestamp=hour_time + timedelta(minutes=(day * 3 + 1) % 60)
+                    timestamp=hour_time + timedelta(minutes=(day * 3 + 1) % 60),
                 )
                 db.session.add(analytics_section)
-                
+
                 # Add project clicks
                 if day % 3 == 0:
                     project_name = project_names[day % len(project_names)]
                     analytics_project = Analytics(
                         session_id=session_id,
-                        event_type='project_click',
-                        section='projects',
+                        event_type="project_click",
+                        section="projects",
                         item_name=project_name,
                         ip_address=f"192.168.1.{day % 255}",
                         country=country,
                         city=city,
-                        timestamp=hour_time + timedelta(minutes=(day * 3 + 2) % 60)
+                        timestamp=hour_time + timedelta(minutes=(day * 3 + 2) % 60),
                     )
                     db.session.add(analytics_project)
-    
+
     db.session.commit()
     print("=" * 60)
     print("Database initialized successfully with dummy data!")

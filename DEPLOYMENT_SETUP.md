@@ -9,6 +9,7 @@ This guide will help you deploy your portfolio application to free hosting servi
 - **URL**: https://render.com
 - **Setup**: Already configured with `render.yaml`
 
+
 ### 2. Railway (Alternative)
 - **Free Tier**: $5 credit/month
 - **URL**: https://railway.app
