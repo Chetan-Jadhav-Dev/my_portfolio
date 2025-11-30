@@ -24,8 +24,8 @@ CORS(app, origins=app.config['CORS_ORIGINS'])
 def initialize_database():
     """Initialize database with sample data if empty (for first-time setup)"""
     try:
-        # Import models needed for initialization (import inside function to avoid circular issues)
-        from models import About, Project, Skill, Experience, Blog, Analytics
+        # Use models already imported at top of file
+        # Import additional modules needed
         from datetime import datetime, timedelta
         import json
         import uuid
@@ -1627,5 +1627,7 @@ def health_check():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))  # Changed to 5001 to avoid macOS AirPlay conflict
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # Use debug=False in production (Render sets FLASK_ENV=production)
+    debug_mode = os.environ.get('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
 
