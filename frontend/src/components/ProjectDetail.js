@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaGithub, FaRocket, FaArrowLeft, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaArrowLeft, FaExternalLinkAlt } from 'react-icons/fa';
 import './ProjectDetail.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';

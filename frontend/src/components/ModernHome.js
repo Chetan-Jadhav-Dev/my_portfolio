@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { 
-  FaGithub, FaLinkedin, FaEnvelope, FaRocket
+  FaGithub, FaLinkedin, FaEnvelope, FaRocket, FaCode
 } from 'react-icons/fa';
 // FaRocket is used in ProjectCard component
 import { trackPageView, trackSectionView, trackProjectClick, trackLinkClick } from '../utils/analytics';
