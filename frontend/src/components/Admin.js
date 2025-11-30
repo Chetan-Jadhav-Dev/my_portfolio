@@ -32,15 +32,37 @@ function Admin() {
   const [notifications, setNotifications] = useState({ unread_likes: 0, unread_comments: 0, total_unread: 0 });
   
   // Load activeTab from localStorage, default to 'analytics'
+  // Use function initializer to ensure it's only read once on mount
   const [activeTab, setActiveTab] = useState(() => {
-    const savedTab = localStorage.getItem('adminActiveTab');
-    return savedTab || 'analytics';
+    try {
+      const savedTab = localStorage.getItem('adminActiveTab');
+      // Validate that saved tab is a valid tab name
+      const validTabs = ['analytics', 'about', 'projects', 'skills', 'experience', 'contact', 'activity', 'github', 'blog', 'blog-editor', 'notifications'];
+      if (savedTab && validTabs.includes(savedTab)) {
+        return savedTab;
+      }
+    } catch (error) {
+      console.error('Error reading adminActiveTab from localStorage:', error);
+    }
+    return 'analytics';
   });
   const [sidebarOpen, setSidebarOpen] = useState(() => {
-    const savedSidebarState = localStorage.getItem('adminSidebarOpen');
-    return savedSidebarState !== null ? savedSidebarState === 'true' : true;
+    try {
+      const savedSidebarState = localStorage.getItem('adminSidebarOpen');
+      return savedSidebarState !== null ? savedSidebarState === 'true' : true;
+    } catch (error) {
+      console.error('Error reading adminSidebarOpen from localStorage:', error);
+      return true;
+    }
   });
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      return localStorage.getItem('darkMode') === 'true';
+    } catch (error) {
+      console.error('Error reading darkMode from localStorage:', error);
+      return false;
+    }
+  });
   const [editingProject, setEditingProject] = useState(null);
   const [editingSkill, setEditingSkill] = useState(null);
   const [editingExperience, setEditingExperience] = useState(null);
@@ -87,9 +109,25 @@ function Admin() {
   }, [darkMode]);
 
   // Save activeTab to localStorage whenever it changes
+  // This ensures the tab persists across page refreshes
   useEffect(() => {
-    localStorage.setItem('adminActiveTab', activeTab);
+    try {
+      localStorage.setItem('adminActiveTab', activeTab);
+      console.log('Saved activeTab to localStorage:', activeTab);
+    } catch (error) {
+      console.error('Error saving adminActiveTab to localStorage:', error);
+    }
   }, [activeTab]);
+  
+  // Verify activeTab is loaded correctly on mount (for debugging)
+  useEffect(() => {
+    const savedTab = localStorage.getItem('adminActiveTab');
+    if (savedTab && savedTab !== activeTab) {
+      console.log('Mismatch detected - localStorage has:', savedTab, 'but state has:', activeTab);
+      // Restore from localStorage if there's a mismatch
+      setActiveTab(savedTab);
+    }
+  }, []); // Only run on mount
 
   // Save sidebar state to localStorage whenever it changes
   useEffect(() => {
