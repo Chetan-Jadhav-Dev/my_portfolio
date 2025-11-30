@@ -106,18 +106,14 @@ ADMIN_EMAIL=your-email@gmail.com
 5. Add to GitHub Secrets as `RENDER_SERVICE_ID`
 
 ### 3.7 Initialize Database
-After deployment, your database needs to be initialized. You can:
+✅ **Database will initialize automatically!**
 
-**Option A: Use Render Shell**
-1. Go to your service → **Shell**
-2. Run:
-   ```bash
-   cd backend
-   python init_db.py
-   ```
+The database will automatically initialize with sample data on first startup. No manual steps needed!
 
-**Option B: Add to startup (temporary)**
-Modify `app.py` temporarily to auto-initialize, then remove it.
+- On first deployment, `app.py` detects if the database is empty
+- It automatically creates all tables and populates sample data
+- This includes: About info, Experiences, Projects, Skills, Blogs, and Analytics data
+- Check Render logs to see "✅ Database initialized successfully with sample data!"
 
 ## 🎨 Step 4: Deploy Frontend to Vercel (Free)
 
