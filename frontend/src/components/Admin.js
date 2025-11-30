@@ -113,19 +113,23 @@ function Admin() {
   useEffect(() => {
     try {
       localStorage.setItem('adminActiveTab', activeTab);
-      console.log('Saved activeTab to localStorage:', activeTab);
     } catch (error) {
       console.error('Error saving adminActiveTab to localStorage:', error);
     }
   }, [activeTab]);
   
-  // Verify activeTab is loaded correctly on mount (for debugging)
+  // Verify activeTab is loaded correctly on mount
+  // This handles cases where React might reset state during development (StrictMode)
   useEffect(() => {
-    const savedTab = localStorage.getItem('adminActiveTab');
-    if (savedTab && savedTab !== activeTab) {
-      console.log('Mismatch detected - localStorage has:', savedTab, 'but state has:', activeTab);
-      // Restore from localStorage if there's a mismatch
-      setActiveTab(savedTab);
+    try {
+      const savedTab = localStorage.getItem('adminActiveTab');
+      const validTabs = ['analytics', 'about', 'projects', 'skills', 'experience', 'contact', 'activity', 'github', 'blog', 'blog-editor', 'notifications'];
+      if (savedTab && validTabs.includes(savedTab) && savedTab !== activeTab) {
+        // Restore from localStorage if there's a mismatch (shouldn't happen, but safety check)
+        setActiveTab(savedTab);
+      }
+    } catch (error) {
+      console.error('Error verifying adminActiveTab on mount:', error);
     }
   }, []); // Only run on mount
 
