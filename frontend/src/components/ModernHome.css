@@ -414,6 +414,29 @@
   overflow-y: auto;
   position: relative;
   border: 2px solid #667eea;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #667eea #2a2a2a;
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+  border: 2px solid #2a2a2a;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
 }
 
 .modal-close {
