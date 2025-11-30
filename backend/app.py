@@ -467,7 +467,9 @@ my_project:
         print("📊 Added: About, Experiences, Projects, Skills, Blogs, Analytics")
         
     except Exception as e:
+        import traceback
         print(f"⚠️  Error initializing database: {str(e)}")
+        print(f"Full traceback:\n{traceback.format_exc()}")
         db.session.rollback()
         # Don't fail startup if initialization fails
 
