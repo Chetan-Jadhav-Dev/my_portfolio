@@ -24,6 +24,16 @@ CORS(app, origins=app.config['CORS_ORIGINS'])
 def initialize_database():
     """Initialize database with sample data if empty (for first-time setup)"""
     try:
+        # Check if auto-initialization is disabled via environment variable
+        # Set AUTO_INIT_DB=false in Render to disable auto-initialization
+        auto_init_enabled = os.environ.get('AUTO_INIT_DB', 'true').lower() in ['true', '1', 'yes']
+        if not auto_init_enabled:
+            print("=" * 60)
+            print("ℹ️  Auto-initialization is DISABLED (AUTO_INIT_DB=false)")
+            print("   Database will not be initialized automatically.")
+            print("=" * 60)
+            return
+        
         # Use models already imported at top of file
         # Import additional modules needed
         from datetime import datetime, timedelta
@@ -33,25 +43,34 @@ def initialize_database():
         # Robust check: Verify database is truly empty by checking multiple tables
         # This prevents re-initialization on every deployment
         # Check ALL key tables - if ANY have data, skip initialization
-        has_about = About.query.first() is not None
-        has_projects = Project.query.first() is not None
-        has_skills = Skill.query.first() is not None
-        has_experience = Experience.query.first() is not None
-        has_blogs = Blog.query.first() is not None
-        has_analytics = Analytics.query.first() is not None
+        print("=" * 60)
+        print("🔍 Checking database for existing data...")
+        
+        try:
+            has_about = About.query.first() is not None
+            has_projects = Project.query.first() is not None
+            has_skills = Skill.query.first() is not None
+            has_experience = Experience.query.first() is not None
+            has_blogs = Blog.query.first() is not None
+            has_analytics = Analytics.query.first() is not None
+            
+            print(f"   About: {has_about}, Projects: {has_projects}, Skills: {has_skills}")
+            print(f"   Experience: {has_experience}, Blogs: {has_blogs}, Analytics: {has_analytics}")
+        except Exception as query_error:
+            print(f"⚠️  Error checking database: {query_error}")
+            print("   Assuming database is empty and needs initialization...")
+            has_about = has_projects = has_skills = has_experience = has_blogs = has_analytics = False
         
         # If ANY table has data, the database is initialized - DO NOT OVERWRITE
         if has_about or has_projects or has_skills or has_experience or has_blogs or has_analytics:
-            print("=" * 60)
             print("✅ Database already contains data. Skipping initialization.")
-            print(f"   About: {has_about}, Projects: {has_projects}, Skills: {has_skills}")
-            print(f"   Experience: {has_experience}, Blogs: {has_blogs}, Analytics: {has_analytics}")
             print("=" * 60)
             return  # Database already has data - DO NOT OVERWRITE
         
-        print("=" * 60)
         print("⚠️  WARNING: Database appears to be completely empty!")
         print("   This should only happen on FIRST deployment.")
+        print("   If you see this on every deployment, your database is being reset.")
+        print("   Consider using a persistent database or setting AUTO_INIT_DB=false")
         print("   Initializing database with sample data...")
         print("=" * 60)
         
@@ -496,6 +515,7 @@ my_project:
 with app.app_context():
     db.create_all()
     # Auto-initialize with sample data if database is empty
+    # Set AUTO_INIT_DB=false in environment variables to disable
     initialize_database()
 
 # Helper function to log admin activities
