@@ -31,8 +31,15 @@ function Admin() {
   const [editingBlog, setEditingBlog] = useState(null);
   const [notifications, setNotifications] = useState({ unread_likes: 0, unread_comments: 0, total_unread: 0 });
   
-  const [activeTab, setActiveTab] = useState('analytics');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // Load activeTab from localStorage, default to 'analytics'
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = localStorage.getItem('adminActiveTab');
+    return savedTab || 'analytics';
+  });
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const savedSidebarState = localStorage.getItem('adminSidebarOpen');
+    return savedSidebarState !== null ? savedSidebarState === 'true' : true;
+  });
   const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
   const [editingProject, setEditingProject] = useState(null);
   const [editingSkill, setEditingSkill] = useState(null);
@@ -78,6 +85,16 @@ function Admin() {
     }
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
+
+  // Save activeTab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('adminActiveTab', activeTab);
+  }, [activeTab]);
+
+  // Save sidebar state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('adminSidebarOpen', sidebarOpen);
+  }, [sidebarOpen]);
 
   useEffect(() => {
     if (token) {
