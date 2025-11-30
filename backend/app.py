@@ -24,17 +24,17 @@ CORS(app, origins=app.config['CORS_ORIGINS'])
 def initialize_database():
     """Initialize database with sample data if empty (for first-time setup)"""
     try:
+        # Import models needed for initialization (import inside function to avoid circular issues)
+        from models import About, Project, Skill, Experience, Blog, Analytics
+        from datetime import datetime, timedelta
+        import json
+        import uuid
+        
         # Check if database is already initialized
         if About.query.first() is not None:
             return  # Database already has data
         
         print("Initializing database with sample data...")
-        
-        # Import models needed for initialization
-        from models import About, Project, Skill, Experience, Blog, Analytics
-        from datetime import datetime, timedelta
-        import json
-        import uuid
         
         # Create about entry
         default_about = About(
