@@ -30,11 +30,30 @@ def initialize_database():
         import json
         import uuid
         
-        # Check if database is already initialized
-        if About.query.first() is not None:
-            return  # Database already has data
+        # Robust check: Verify database is truly empty by checking multiple tables
+        # This prevents re-initialization on every deployment
+        # Check ALL key tables - if ANY have data, skip initialization
+        has_about = About.query.first() is not None
+        has_projects = Project.query.first() is not None
+        has_skills = Skill.query.first() is not None
+        has_experience = Experience.query.first() is not None
+        has_blogs = Blog.query.first() is not None
+        has_analytics = Analytics.query.first() is not None
         
-        print("Initializing database with sample data...")
+        # If ANY table has data, the database is initialized - DO NOT OVERWRITE
+        if has_about or has_projects or has_skills or has_experience or has_blogs or has_analytics:
+            print("=" * 60)
+            print("✅ Database already contains data. Skipping initialization.")
+            print(f"   About: {has_about}, Projects: {has_projects}, Skills: {has_skills}")
+            print(f"   Experience: {has_experience}, Blogs: {has_blogs}, Analytics: {has_analytics}")
+            print("=" * 60)
+            return  # Database already has data - DO NOT OVERWRITE
+        
+        print("=" * 60)
+        print("⚠️  WARNING: Database appears to be completely empty!")
+        print("   This should only happen on FIRST deployment.")
+        print("   Initializing database with sample data...")
+        print("=" * 60)
         
         # Create about entry
         default_about = About(
