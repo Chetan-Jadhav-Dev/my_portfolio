@@ -1,0 +1,35 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'backend/**'
+      - 'render.yaml'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to Render
+        uses: johnbeynon/render-deploy@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+        continue-on-error: true
+      
+      - name: Manual Deploy Instructions
+        if: failure()
+        run: |
+          echo "::warning::Automatic deployment failed. Please deploy manually:"
+          echo "1. Go to https://dashboard.render.com"
+          echo "2. Select your backend service"
+          echo "3. Click 'Manual Deploy' -> 'Deploy latest commit'"
+

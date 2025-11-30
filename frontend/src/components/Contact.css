@@ -1,0 +1,229 @@
+.contact-section {
+  padding: 6rem 2rem;
+  background: #1a1a1a;
+  color: white;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-container {
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.contact-title {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contact-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #aaa;
+  margin-bottom: 3rem;
+}
+
+.success-message {
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid #4caf50;
+  color: #4caf50;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.error-message {
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid #f44336;
+  color: #f44336;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base styles for all input types - unified styling with higher specificity */
+.contact-form .form-group input,
+.contact-form .form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(102, 126, 234, 0.3) !important;
+  border-radius: 8px;
+  color: white !important;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: 1.5;
+  display: block;
+}
+
+/* Ensure all input types have identical styling */
+.contact-form .form-group input[type="text"],
+.contact-form .form-group input[type="email"],
+.contact-form .form-group input[type="tel"],
+.contact-form .form-group input[type="url"],
+.contact-form .form-group input[type="search"] {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(102, 126, 234, 0.3) !important;
+  border-radius: 8px;
+  color: white !important;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  line-height: 1.5;
+  display: block;
+}
+
+/* Textarea specific styles */
+.contact-form .form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Focus styles for all input types - unified with higher specificity */
+.contact-form .form-group input:focus,
+.contact-form .form-group textarea:focus {
+  outline: none !important;
+  border-color: #667eea !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+/* Specific focus for each input type to override browser defaults */
+.contact-form .form-group input[type="text"]:focus,
+.contact-form .form-group input[type="email"]:focus,
+.contact-form .form-group input[type="tel"]:focus,
+.contact-form .form-group input[type="url"]:focus,
+.contact-form .form-group input[type="search"]:focus,
+.contact-form .form-group textarea:focus {
+  outline: none !important;
+  border-color: #667eea !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+/* Active state (when clicking) */
+.contact-form .form-group input:active,
+.contact-form .form-group textarea:active {
+  border-color: #667eea !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Hover styles for all input types - unified */
+.contact-form .form-group input:hover,
+.contact-form .form-group textarea:hover {
+  border-color: rgba(102, 126, 234, 0.5) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Specific hover for each input type */
+.contact-form .form-group input[type="text"]:hover,
+.contact-form .form-group input[type="email"]:hover,
+.contact-form .form-group input[type="tel"]:hover,
+.contact-form .form-group input[type="url"]:hover,
+.contact-form .form-group input[type="search"]:hover,
+.contact-form .form-group textarea:hover {
+  border-color: rgba(102, 126, 234, 0.5) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Placeholder styles for all input types */
+.contact-form .form-group input[type="text"]::placeholder,
+.contact-form .form-group input[type="email"]::placeholder,
+.contact-form .form-group input[type="tel"]::placeholder,
+.contact-form .form-group input[type="url"]::placeholder,
+.contact-form .form-group input[type="search"]::placeholder,
+.contact-form .form-group textarea::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
+/* Remove browser-specific styling for email inputs */
+.form-group input[type="email"]::-webkit-outer-spin-button,
+.form-group input[type="email"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-group input[type="email"]::-webkit-autofill,
+.form-group input[type="email"]::-webkit-autofill:hover,
+.form-group input[type="email"]::-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset;
+  transition: background-color 5000s ease-in-out 0s;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+  margin-top: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.submit-button:hover:not(:disabled) {
+  box-shadow: 0 5px 30px rgba(102, 126, 234, 0.4);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
