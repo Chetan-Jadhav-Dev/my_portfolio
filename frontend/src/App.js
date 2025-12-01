@@ -7,10 +7,12 @@ import Contact from './components/Contact';
 import Admin from './components/Admin';
 import BlogList from './components/BlogList';
 import BlogPost from './components/BlogPost';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   return (
     <Router>
+      <CustomCursor />
       <div className="App">
         <Routes>
           <Route path="/" element={<ModernHome />} />
@@ -64,4 +66,3 @@ const AppWithErrorBoundary = () => {
 };
 
 export default AppWithErrorBoundary;
-

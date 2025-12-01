@@ -298,17 +298,24 @@ class BlogLike(db.Model):
         }
 
 class BlogComment(db.Model):
+    __tablename__ = 'blog_comments'
     id = db.Column(db.Integer, primary_key=True)
     blog_id = db.Column(db.Integer, db.ForeignKey('blog.id'), nullable=False)
-    parent_id = db.Column(db.Integer, db.ForeignKey('blog_comment.id'), nullable=True)  # For replies
-    author_name = db.Column(db.String(200), nullable=False)
-    author_email = db.Column(db.String(200))
+    parent_id = db.Column(db.Integer, db.ForeignKey('blog_comments.id'))  # For replies
+    author_name = db.Column(db.String(100), nullable=False)
+    author_email = db.Column(db.String(120))
     content = db.Column(db.Text, nullable=False)
+    like_count = db.Column(db.Integer, default=0)  # Track comment likes (cached count)
+    approved = db.Column(db.Boolean, default=True)  # For moderation (default True for auto-approve)
     user_ip = db.Column(db.String(100))
     user_agent = db.Column(db.String(500))
-    approved = db.Column(db.Boolean, default=True)  # Auto-approve or moderate
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     read = db.Column(db.Boolean, default=False)  # Notification read status
+
+    # Relationships
+    replies = db.relationship('BlogComment',
+                            backref=db.backref('parent', remote_side=[id]),
+                            cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -318,8 +325,25 @@ class BlogComment(db.Model):
             'author_name': self.author_name,
             'author_email': self.author_email,
             'content': self.content,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'like_count': self.like_count or 0,
             'approved': self.approved,
-            'read': self.read
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'read': self.read,
+            'replies': [reply.to_dict() for reply in self.replies] if hasattr(self, 'replies') and self.parent_id is None else []
+        }
+
+class CommentLike(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment_id = db.Column(db.Integer, db.ForeignKey('blog_comments.id'), nullable=False)
+    user_ip = db.Column(db.String(100))
+    user_agent = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'comment_id': self.comment_id,
+            'user_ip': self.user_ip,
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }
 

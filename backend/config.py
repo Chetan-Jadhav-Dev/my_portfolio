@@ -10,7 +10,13 @@ class Config:
     _db_path = os.path.join(_base_dir, 'instance', 'portfolio.db')
     # Ensure instance directory exists
     os.makedirs(os.path.dirname(_db_path), exist_ok=True)
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or f'sqlite:///{_db_path}'
+    
+    # Handle Supabase/Render PostgreSQL URL format (SQLAlchemy requires postgresql://)
+    _db_url = os.environ.get('DATABASE_URL')
+    if _db_url and _db_url.startswith('postgres://'):
+        _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+        
+    SQLALCHEMY_DATABASE_URI = _db_url or f'sqlite:///{_db_path}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-key-change-in-production'
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'

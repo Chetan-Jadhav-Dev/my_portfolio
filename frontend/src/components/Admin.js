@@ -1382,20 +1382,46 @@ function Admin() {
 
               {githubRepos.length > 0 && (
                 <div className="github-repos-selection">
-                  <h3>Select Repositories to Display</h3>
-                  <p>Select which repositories should be shown on the frontend:</p>
+                  <div className="repos-selection-header">
+                    <div>
+                      <h3>Select Repositories to Display</h3>
+                      <p>Choose which repositories should be shown on the frontend</p>
+                    </div>
+                    <div className="selected-count">
+                      <span className="count-badge">
+                        {(() => {
+                          const selectedRepos = githubSettings?.selected_repos || [];
+                          return selectedRepos.length;
+                        })()}
+                      </span>
+                      <span>Selected</span>
+                    </div>
+                  </div>
                   <div className="repos-list">
                     {githubRepos.map((repo) => {
                       const selectedRepos = githubSettings?.selected_repos || [];
                       const isSelected = selectedRepos.includes(repo.full_name) || selectedRepos.includes(repo.name);
                       
                       return (
-                        <div key={repo.id} className={`repo-item ${isSelected ? 'selected' : ''}`}>
-                          <label>
+                        <div 
+                          key={repo.id} 
+                          className={`repo-card ${isSelected ? 'selected' : ''}`}
+                          onClick={(e) => {
+                            // Allow checkbox clicks to work
+                            if (e.target.type !== 'checkbox') {
+                              const checkbox = e.currentTarget.querySelector('input[type="checkbox"]');
+                              if (checkbox) {
+                                checkbox.click();
+                              }
+                            }
+                          }}
+                        >
+                          <div className="repo-checkbox-wrapper">
                             <input
                               type="checkbox"
                               checked={isSelected}
                               onChange={(e) => {
+                                e.stopPropagation();
                                 const currentSelected = githubSettings?.selected_repos || [];
                                 let newSelected;
                                 if (e.target.checked) {
@@ -1405,28 +1431,62 @@ function Admin() {
                                 }
                                 setGithubSettings({...githubSettings, selected_repos: newSelected});
                               }}
+                              className="repo-checkbox"
                             />
-                            <div className="repo-info">
-                              <strong>{repo.name}</strong>
-                              {repo.description && <p>{repo.description}</p>}
-                              <div className="repo-meta">
-                                {repo.language && <span>📝 {repo.language}</span>}
-                                <span>⭐ {repo.stars}</span>
-                                <span>🍴 {repo.forks}</span>
-                                {repo.is_private && <span>🔒 Private</span>}
-                              </div>
+                            {isSelected && <div className="checkmark">✓</div>}
+                          </div>
+                          <div className="repo-content">
+                            <div className="repo-header">
+                              <h4 className="repo-name">{repo.name}</h4>
+                              {repo.is_private && (
+                                <span className="repo-badge private">🔒 Private</span>
+                              )}
                             </div>
-                          </label>
+                            {repo.description && (
+                              <p className="repo-description">{repo.description}</p>
+                            )}
+                            <div className="repo-footer">
+                              <div className="repo-stats">
+                                {repo.language && (
+                                  <div className="repo-stat">
+                                    <span className="stat-icon">📝</span>
+                                    <span className="stat-value">{repo.language}</span>
+                                  </div>
+                                )}
+                                <div className="repo-stat">
+                                  <span className="stat-icon">⭐</span>
+                                  <span className="stat-value">{repo.stars || 0}</span>
+                                </div>
+                                <div className="repo-stat">
+                                  <span className="stat-icon">🍴</span>
+                                  <span className="stat-value">{repo.forks || 0}</span>
+                                </div>
+                              </div>
+                              {repo.html_url && (
+                                <a 
+                                  href={repo.html_url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="repo-link"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  View on GitHub →
+                                </a>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       );
                     })}
                   </div>
-                  <button 
-                    onClick={() => updateGithubSettings(githubSettings)}
-                    className="save-btn"
-                  >
-                    Save Selected Repositories
-                  </button>
+                  <div className="repos-actions">
+                    <button 
+                      onClick={() => updateGithubSettings(githubSettings)}
+                      className="save-btn"
+                    >
+                      💾 Save Selected Repositories
+                    </button>
+                  </div>
                 </div>
               )}
 

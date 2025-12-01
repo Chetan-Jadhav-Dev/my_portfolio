@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from flask_mail import Mail, Message
 from datetime import timedelta, datetime
 from config import Config
-from models import db, Project, About, Skill, Analytics, Experience, Contact, ActivityLog, GitHubSettings, Blog, BlogLike, BlogComment
+from models import db, Project, About, Skill, Analytics, Experience, Contact, ActivityLog, GitHubSettings, Blog, BlogLike, BlogComment, CommentLike
 import os
 import requests
 import uuid
@@ -141,119 +141,66 @@ Key Technologies: TensorFlow, OpenCV, MLFlow, SQL, AWS SageMaker, Apache Airflow
         # Create sample projects
         sample_projects = [
             Project(
-                title="Financial Data Pipeline Optimization",
-                description="Designed a robust data pipeline using Snowflake for seamless integration and advanced analytics. Enabled real-time data processing and transformation with Kafka and Flink.",
-                detailed_description="""This project involved designing and implementing a comprehensive data pipeline architecture for financial data processing. The solution enabled real-time data processing and transformation using Kafka and Flink for both batch and streaming data.
+                title="Real-Time Financial Data Pipeline",
+                description="High-throughput streaming pipeline processing 1M+ transactions/sec using Kafka, Flink, and Snowflake.",
+                detailed_description="""Designed and implemented a robust real-time data pipeline for a fintech application. The system ingests millions of transaction records daily, performs real-time fraud detection, and loads aggregated data into Snowflake for analytics.
 
 Key Features:
-- Real-time data ingestion using Apache Kafka
-- Stream processing with Apache Flink
-- Data transformation and staging with DBT
-- Advanced analytics with Snowflake
-- Automated ETL workflows with Airflow
-- Zero-downtime deployment with Kubernetes
+- **Ingestion**: Apache Kafka for high-throughput event streaming.
+- **Processing**: Apache Flink for stateful stream processing and windowed aggregations.
+- **Storage**: Snowflake Data Cloud for scalable data warehousing.
+- **Orchestration**: Apache Airflow for managing batch backfills and dependency management.
+- **IaC**: Terraform for provisioning AWS infrastructure (MSK, EMR, S3).
 
-The pipeline processes millions of financial transactions daily, ensuring data quality and enabling real-time business intelligence for decision-making.""",
-                technologies="Python,SQL,Snowflake,Kafka,Flink,DBT,Airflow,Docker,Kubernetes",
+The pipeline reduced data latency from hours to seconds, enabling the fraud team to react to suspicious activities in near real-time.""",
+                technologies="Apache Kafka,Apache Flink,Snowflake,AWS,Terraform,Python,Java",
                 github_url="https://github.com/chetan-jadhav/financial-pipeline",
-                live_url="https://demo.example.com/financial-pipeline",
-                image_url="https://via.placeholder.com/600x400/667eea/ffffff?text=Financial+Pipeline",
+                live_url="https://demo.example.com/pipeline",
+                image_url="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
                 screenshots=json.dumps([
-                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Screenshot+1",
-                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Screenshot+2",
-                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Screenshot+3"
+                    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1543286386-713df548e9cc?q=80&w=1000&auto=format&fit=crop"
                 ])
             ),
             Project(
-                title="Zero-Downtime Deployment System",
-                description="Implemented CI/CD pipelines using Kubernetes and Docker, ensuring zero downtime during production rollouts. Automated deployment process with comprehensive monitoring.",
-                detailed_description="""A comprehensive CI/CD solution that enables zero-downtime deployments for critical production systems. The system uses Kubernetes for orchestration and Docker for containerization.
+                title="Data Lakehouse Architecture Migration",
+                description="Migrated legacy data warehouse to a modern Data Lakehouse using Databricks and Delta Lake.",
+                detailed_description="""Led the migration of a multi-terabyte legacy data warehouse to a modern Data Lakehouse architecture on AWS using Databricks and Delta Lake. This modernization improved query performance by 40% and reduced storage costs by 30%.
 
-Key Features:
-- Automated CI/CD pipelines with GitHub Actions
-- Blue-green deployment strategy
-- Health checks and automatic rollback
-- Comprehensive monitoring and alerting
-- Infrastructure as Code with Terraform
-- Multi-environment support (dev, staging, prod)
+Key Achievements:
+- Designed the Bronze-Silver-Gold medallion architecture.
+- Implemented CDC (Change Data Capture) pipelines using Debezium and Spark Structured Streaming.
+- Enforced data quality checks using Great Expectations.
+- Enabled ACID transactions and time travel capabilities with Delta Lake.
+- Built a unified catalog for data discovery.
 
-This system reduced deployment time by 80% and eliminated production downtime during deployments.""",
-                technologies="Kubernetes,Docker,Terraform,GitHub Actions,Python,CI/CD",
-                github_url="https://github.com/chetan-jadhav/zero-downtime-deployment",
-                live_url="https://demo.example.com/deployment",
-                image_url="https://via.placeholder.com/600x400/764ba2/ffffff?text=Deployment+System",
+This project democratized data access across the organization, allowing data scientists and analysts to query the same consistent source of truth.""",
+                technologies="Databricks,Apache Spark,Delta Lake,AWS S3,Python,SQL,Great Expectations",
+                github_url="https://github.com/chetan-jadhav/lakehouse-migration",
+                live_url=None,
+                image_url="https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=1000&auto=format&fit=crop",
                 screenshots=json.dumps([
-                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Deployment+Dashboard",
-                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=CI/CD+Pipeline"
+                    "https://images.unsplash.com/photo-1558494949-ef526b0042a0?q=80&w=1000&auto=format&fit=crop"
                 ])
             ),
             Project(
-                title="Advanced Analytics Integration - Loan Eligibility Prediction",
-                description="Developed ML models for loan eligibility prediction, improving financial inclusion for underbanked populations. Integrated with real-time data streams.",
-                detailed_description="""A machine learning system that predicts loan eligibility for underbanked populations, improving financial inclusion. The system uses advanced ML models and integrates with real-time data streams.
+                title="dbt Analytics Engineering Framework",
+                description="Implemented a modular dbt project for transforming raw data into business-ready data marts.",
+                detailed_description="""Established a scalable Analytics Engineering framework using dbt (data build tool) and BigQuery. This framework replaced ad-hoc SQL scripts with version-controlled, tested, and documented data models.
 
-Key Features:
-- Machine learning models for loan prediction
-- Real-time data integration
-- Feature engineering and model training
-- Model deployment with MLflow
-- API endpoints for predictions
-- Comprehensive monitoring and logging
+Key Components:
+- **Modeling**: Dimensional modeling (Star Schema) for performance and usability.
+- **Testing**: Automated schema and data integrity tests (unique, not null, relationships).
+- **Documentation**: Auto-generated documentation hosted on GitHub Pages.
+- **CI/CD**: GitHub Actions pipeline to lint SQL and run tests on pull requests.
 
-The system improved loan approval accuracy by 35% and reduced processing time by 60%.""",
-                technologies="Python,Machine Learning,MLflow,Azure ML Studio,SQL,API Development",
-                github_url="https://github.com/chetan-jadhav/loan-prediction",
-                live_url="https://demo.example.com/loan-prediction",
-                image_url="https://via.placeholder.com/600x400/667eea/ffffff?text=ML+Model",
+The framework significantly reduced data incidents and improved trust in business dashboards.""",
+                technologies="dbt,BigQuery,SQL,GitHub Actions,Python,Looker",
+                github_url="https://github.com/chetan-jadhav/dbt-analytics",
+                live_url="https://demo.example.com/dbt-docs",
+                image_url="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
                 screenshots=json.dumps([
-                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Model+Dashboard",
-                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Prediction+Results"
-                ])
-            ),
-            Project(
-                title="Car Damage Detection System",
-                description="Automated car damage detection using image processing and deep learning techniques. Integrated MVS cameras and APIs for seamless data acquisition.",
-                detailed_description="""An AI-powered system that automatically detects and classifies car damage using computer vision and deep learning. The system processes images from multiple sources and provides detailed damage reports.
-
-Key Features:
-- Deep learning models for damage detection
-- Image processing with OpenCV
-- Multi-camera integration
-- Real-time damage classification
-- RESTful API for integration
-- Containerized deployment with Docker
-
-The system reduced inspection time by 70% and improved accuracy by 25% compared to manual inspection.""",
-                technologies="Python,TensorFlow,OpenCV,Deep Learning,Docker,Kubernetes,API",
-                github_url="https://github.com/chetan-jadhav/car-damage-detection",
-                live_url="https://demo.example.com/car-damage",
-                image_url="https://via.placeholder.com/600x400/764ba2/ffffff?text=Car+Damage+AI",
-                screenshots=json.dumps([
-                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Damage+Detection",
-                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Analysis+Report"
-                ])
-            ),
-            Project(
-                title="E-Commerce Chatbot with GPT-3.5",
-                description="Built and deployed e-commerce chatbots using GPT-3.5 Turbo. Implemented RAG for enhanced context understanding and response generation.",
-                detailed_description="""An intelligent e-commerce chatbot powered by GPT-3.5 Turbo that provides customer support, product recommendations, and order assistance. The system uses RAG (Retrieval-Augmented Generation) for enhanced context understanding.
-
-Key Features:
-- GPT-3.5 Turbo integration
-- RAG implementation for context retrieval
-- Multi-turn conversation handling
-- Product recommendation engine
-- Order tracking and support
-- Analytics and monitoring dashboard
-
-The chatbot handles 80% of customer inquiries automatically, reducing support costs by 60%.""",
-                technologies="Python,GPT-3.5,RAG,OpenAI API,Flask,React,SQL",
-                github_url="https://github.com/chetan-jadhav/ecommerce-chatbot",
-                live_url="https://demo.example.com/chatbot",
-                image_url="https://via.placeholder.com/600x400/667eea/ffffff?text=Chatbot",
-                screenshots=json.dumps([
-                    "https://via.placeholder.com/1200x800/667eea/ffffff?text=Chat+Interface",
-                    "https://via.placeholder.com/1200x800/764ba2/ffffff?text=Analytics+Dashboard"
+                    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop"
                 ])
             )
         ]
@@ -264,28 +211,17 @@ The chatbot handles 80% of customer inquiries automatically, reducing support co
         # Create skills with icons
         sample_skills = [
             Skill(name="Python", category="Programming Languages", proficiency=95, icon="FaPython"),
-            Skill(name="Java", category="Programming Languages", proficiency=85, icon="FaJava"),
-            Skill(name="Scala", category="Programming Languages", proficiency=80, icon="SiScala"),
-            Skill(name="JavaScript", category="Programming Languages", proficiency=75, icon="SiJavascript"),
-            Skill(name="SQL", category="Programming Languages", proficiency=90, icon="FaCode"),
-            Skill(name="React", category="Frontend", proficiency=80, icon="SiReact"),
-            Skill(name="Flask", category="Backend", proficiency=85, icon="SiFlask"),
-            Skill(name="DBT", category="Data Tools", proficiency=90, icon="FaCode"),
-            Skill(name="Apache Airflow", category="Data Tools", proficiency=88, icon="FaCode"),
-            Skill(name="AWS", category="Cloud", proficiency=92, icon="FaAws"),
-            Skill(name="Azure", category="Cloud", proficiency=85, icon="SiAzure"),
-            Skill(name="Snowflake", category="Database", proficiency=90, icon="SiSnowflake"),
-            Skill(name="Docker", category="DevOps", proficiency=88, icon="FaDocker"),
-            Skill(name="Kubernetes", category="DevOps", proficiency=85, icon="SiKubernetes"),
-            Skill(name="Terraform", category="DevOps", proficiency=82, icon="FaCode"),
-            Skill(name="Apache Kafka", category="Data Tools", proficiency=85, icon="FaCode"),
-            Skill(name="Apache Spark", category="Data Tools", proficiency=80, icon="FaCode"),
-            Skill(name="PySpark", category="Data Tools", proficiency=85, icon="FaCode"),
-            Skill(name="TensorFlow", category="Machine Learning", proficiency=80, icon="FaCode"),
-            Skill(name="MLflow", category="Machine Learning", proficiency=75, icon="FaCode"),
-            Skill(name="Git", category="Tools", proficiency=90, icon="FaCode"),
-            Skill(name="CI/CD", category="DevOps", proficiency=85, icon="FaCode"),
-            Skill(name="Linux", category="Tools", proficiency=88, icon="FaCode"),
+            Skill(name="SQL", category="Programming Languages", proficiency=90, icon="FaDatabase"),
+            Skill(name="Scala", category="Programming Languages", proficiency=80, icon="FaCode"),
+            Skill(name="Apache Spark", category="Big Data", proficiency=90, icon="SiApachespark"),
+            Skill(name="Kafka", category="Big Data", proficiency=85, icon="SiApachekafka"),
+            Skill(name="Snowflake", category="Data Warehousing", proficiency=92, icon="SiSnowflake"),
+            Skill(name="Databricks", category="Data Warehousing", proficiency=88, icon="SiDatabricks"),
+            Skill(name="dbt", category="Data Engineering", proficiency=90, icon="SiDbt"),
+            Skill(name="Airflow", category="Data Engineering", proficiency=85, icon="SiApacheairflow"),
+            Skill(name="AWS", category="Cloud", proficiency=85, icon="FaAws"),
+            Skill(name="Docker", category="DevOps", proficiency=80, icon="FaDocker"),
+            Skill(name="Terraform", category="DevOps", proficiency=75, icon="SiTerraform"),
         ]
         
         for skill in sample_skills:
@@ -294,138 +230,68 @@ The chatbot handles 80% of customer inquiries automatically, reducing support co
         # Create sample blogs
         sample_blogs = [
             Blog(
-                title="Building Scalable Data Pipelines with Snowflake and DBT",
-                slug="building-scalable-data-pipelines-snowflake-dbt",
-                excerpt="Learn how to design and implement scalable data pipelines using Snowflake and DBT for modern data engineering workflows.",
-                banner_image_url="https://via.placeholder.com/1200x600/667eea/ffffff?text=Data+Pipelines",
+                title="The Evolution of the Modern Data Stack",
+                slug="evolution-modern-data-stack",
+                excerpt="From Hadoop clusters to the Cloud Data Lakehouse. A deep dive into how data engineering architecture has evolved over the last decade.",
+                banner_image_url="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop",
                 content="""<h2>Introduction</h2>
-<p>In today's data-driven world, building scalable and maintainable data pipelines is crucial for any organization. This blog post explores how to leverage Snowflake and DBT to create robust data engineering solutions.</p>
+<p>The data landscape has shifted dramatically. Gone are the days of managing complex on-premise Hadoop clusters. Today, we live in the era of the Modern Data Stack (MDS).</p>
 
-<h2>Why Snowflake and DBT?</h2>
-<p>Snowflake provides a cloud-native data warehouse that scales automatically, while DBT (Data Build Tool) enables data engineers to transform data using SQL and version control.</p>
+<h2>What is the Modern Data Stack?</h2>
+<p>The MDS is a suite of tools centered around a cloud data warehouse (like Snowflake, BigQuery, or Redshift). It emphasizes modularity, scalability, and ease of use.</p>
 
-<h2>Key Benefits</h2>
+<h3>Key Components:</h3>
 <ul>
-<li>Scalability: Handle petabytes of data effortlessly</li>
-<li>Version Control: Track all transformations in Git</li>
-<li>Testing: Built-in data quality testing</li>
-<li>Documentation: Auto-generated documentation</li>
+<li><strong>Ingestion:</strong> Fivetran, Airbyte</li>
+<li><strong>Warehousing:</strong> Snowflake, Databricks, BigQuery</li>
+<li><strong>Transformation:</strong> dbt (data build tool)</li>
+<li><strong>Orchestration:</strong> Airflow, Dagster, Prefect</li>
+<li><strong>Reverse ETL:</strong> Hightouch, Census</li>
 </ul>
 
-<h2>Getting Started</h2>
-<p>To get started, you'll need:</p>
-<pre><code class="language-python"># Install DBT
-pip install dbt-snowflake
-
-# Initialize a project
-dbt init my_project
-
-# Configure your Snowflake connection
-# profiles.yml
-my_project:
-  target: dev
-  outputs:
-    dev:
-      type: snowflake
-      account: your_account
-      user: your_user
-      password: your_password
-      warehouse: compute_wh
-      database: analytics
-      schema: dbt</code></pre>
+<h2>The Shift to ELT</h2>
+<p>With cheap cloud storage and powerful compute, we've moved from ETL (Extract, Transform, Load) to ELT (Extract, Load, Transform). This allows us to load raw data first and transform it later using SQL, giving us more flexibility and agility.</p>
 
 <h2>Conclusion</h2>
-<p>Combining Snowflake and DBT provides a powerful solution for modern data engineering. Start building your pipelines today!</p>""",
+<p>Embracing the MDS allows data teams to focus on delivering value rather than managing infrastructure. It's an exciting time to be a data engineer!</p>""",
                 author="Chetan Jadhav",
                 published=True,
                 featured=True,
                 show_on_homepage=True,
-                tags="Data Engineering,Snowflake,DBT,ETL",
-                reading_time=8,
-                views=150,
+                tags="Data Engineering,Modern Data Stack,Cloud,ETL",
+                reading_time=5,
+                views=120,
                 published_at=datetime.utcnow() - timedelta(days=5)
             ),
             Blog(
-                title="Zero-Downtime Deployments with Kubernetes",
-                slug="zero-downtime-deployments-kubernetes",
-                excerpt="Discover strategies for achieving zero-downtime deployments in production environments using Kubernetes orchestration.",
-                banner_image_url="https://via.placeholder.com/1200x600/764ba2/ffffff?text=Kubernetes",
-                content="""<h2>Introduction</h2>
-<p>Zero-downtime deployments are essential for maintaining service availability. Kubernetes provides several strategies to achieve this.</p>
+                title="Idempotency in Data Pipelines: Why It Matters",
+                slug="idempotency-data-pipelines",
+                excerpt="Understanding idempotency is crucial for building reliable data pipelines. Learn what it is and how to implement it.",
+                banner_image_url="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=1000&auto=format&fit=crop",
+                content="""<h2>What is Idempotency?</h2>
+<p>In data engineering, an idempotent operation is one that can be applied multiple times without changing the result beyond the initial application. In simpler terms: running your pipeline twice shouldn't duplicate your data.</p>
 
-<h2>Deployment Strategies</h2>
-<h3>1. Rolling Updates</h3>
-<p>Kubernetes' default deployment strategy gradually replaces old pods with new ones.</p>
+<h2>Why is it Important?</h2>
+<p>Pipelines fail. Networks glitch. Servers crash. When you need to backfill data or retry a failed run, you need to be confident that you won't corrupt your dataset.</p>
 
-<h3>2. Blue-Green Deployment</h3>
-<p>Run two identical production environments and switch traffic between them.</p>
+<h2>Strategies for Idempotency</h2>
+<h3>1. DELETE-INSERT Pattern</h3>
+<p>Before inserting data for a specific date partition, delete any existing data for that partition.</p>
+<pre><code class="language-sql">DELETE FROM target_table WHERE date = '2023-10-27';
+INSERT INTO target_table SELECT * FROM source WHERE date = '2023-10-27';</code></pre>
 
-<h3>3. Canary Deployment</h3>
-<p>Gradually roll out changes to a small subset of users before full deployment.</p>
+<h3>2. MERGE (Upsert)</h3>
+<p>Use the MERGE statement to update existing records and insert new ones based on a unique key.</p>
 
 <h2>Conclusion</h2>
-<p>With proper configuration, Kubernetes enables seamless zero-downtime deployments.</p>""",
+<p>Designing for idempotency from day one will save you countless headaches down the road. It is the bedrock of reliable data engineering.</p>""",
                 author="Chetan Jadhav",
                 published=True,
                 featured=False,
                 show_on_homepage=True,
-                tags="Kubernetes,DevOps,Deployment,CI/CD",
-                reading_time=6,
-                views=98,
-                published_at=datetime.utcnow() - timedelta(days=3)
-            ),
-            Blog(
-                title="Machine Learning Model Deployment with MLflow",
-                slug="ml-model-deployment-mlflow",
-                excerpt="A comprehensive guide to deploying machine learning models in production using MLflow for model tracking and management.",
-                banner_image_url="https://via.placeholder.com/1200x600/667eea/ffffff?text=MLflow",
-                content="""<h2>Introduction</h2>
-<p>MLflow is an open-source platform for managing the machine learning lifecycle, including experimentation, reproducibility, and deployment.</p>
-
-<h2>MLflow Components</h2>
-<ul>
-<li><strong>Tracking:</strong> Log parameters, metrics, and artifacts</li>
-<li><strong>Projects:</strong> Package ML code in a reusable format</li>
-<li><strong>Models:</strong> Deploy models from various ML libraries</li>
-<li><strong>Model Registry:</strong> Centralized model store</li>
-</ul>
-
-<h2>Conclusion</h2>
-<p>MLflow simplifies ML model lifecycle management and deployment.</p>""",
-                author="Chetan Jadhav",
-                published=True,
-                featured=True,
-                show_on_homepage=False,
-                tags="Machine Learning,MLflow,Python,Deployment",
-                reading_time=10,
-                views=125,
-                published_at=datetime.utcnow() - timedelta(days=1)
-            ),
-            Blog(
-                title="Building Real-Time Data Streams with Apache Kafka",
-                slug="real-time-data-streams-apache-kafka",
-                excerpt="Explore how to build real-time data streaming applications using Apache Kafka for event-driven architectures.",
-                banner_image_url="https://via.placeholder.com/1200x600/764ba2/ffffff?text=Kafka",
-                content="""<h2>Introduction</h2>
-<p>Apache Kafka is a distributed streaming platform capable of handling trillions of events per day.</p>
-
-<h2>Core Concepts</h2>
-<ul>
-<li><strong>Topics:</strong> Categories of messages</li>
-<li><strong>Producers:</strong> Applications that publish messages</li>
-<li><strong>Consumers:</strong> Applications that read messages</li>
-<li><strong>Brokers:</strong> Kafka servers that store messages</li>
-</ul>
-
-<h2>Conclusion</h2>
-<p>Kafka enables building robust real-time data streaming applications.</p>""",
-                author="Chetan Jadhav",
-                published=True,
-                featured=False,
-                show_on_homepage=False,
-                tags="Kafka,Streaming,Real-time,Data Engineering",
-                reading_time=7,
-                views=87,
+                tags="Data Engineering,Best Practices,SQL,Pipelines",
+                reading_time=4,
+                views=85,
                 published_at=datetime.utcnow() - timedelta(days=2)
             )
         ]
@@ -1544,10 +1410,10 @@ def like_blog(blog_id):
     """Like a blog post"""
     blog = Blog.query.get_or_404(blog_id)
     
-    user_ip = request.remote_addr
+    user_ip = request.remote_addr or request.headers.get('X-Forwarded-For', '').split(',')[0]
     user_agent = request.headers.get('User-Agent', '')
     
-    # Check if already liked from this IP (optional - you can remove this for multiple likes)
+    # Check if already liked from this IP
     existing_like = BlogLike.query.filter_by(blog_id=blog_id, user_ip=user_ip).first()
     if existing_like:
         return jsonify({'message': 'Already liked', 'liked': True}), 200
@@ -1560,13 +1426,23 @@ def like_blog(blog_id):
     db.session.add(like)
     db.session.commit()
     
-    return jsonify({'message': 'Blog liked', 'liked': True}), 201
+    # Get updated count
+    count = BlogLike.query.filter_by(blog_id=blog_id).count()
+    return jsonify({'message': 'Blog liked', 'liked': True, 'count': count}), 201
 
 @app.route('/api/blogs/<int:blog_id>/likes', methods=['GET'])
 def get_blog_likes(blog_id):
-    """Get like count for a blog"""
+    """Get like count for a blog and check if current user has liked"""
+    user_ip = request.remote_addr or request.headers.get('X-Forwarded-For', '').split(',')[0]
     count = BlogLike.query.filter_by(blog_id=blog_id).count()
-    return jsonify({'count': count}), 200
+    
+    # Check if current user has liked
+    user_liked = False
+    if user_ip:
+        existing_like = BlogLike.query.filter_by(blog_id=blog_id, user_ip=user_ip).first()
+        user_liked = existing_like is not None
+    
+    return jsonify({'count': count, 'liked': user_liked}), 200
 
 @app.route('/api/blogs/<int:blog_id>/comments', methods=['GET'])
 def get_blog_comments(blog_id):
@@ -1589,14 +1465,18 @@ def create_blog_comment(blog_id):
     blog = Blog.query.get_or_404(blog_id)
     data = request.get_json()
     
+    user_ip = request.remote_addr or request.headers.get('X-Forwarded-For', '').split(',')[0]
+    user_agent = request.headers.get('User-Agent', '')
+    
     comment = BlogComment(
         blog_id=blog_id,
         parent_id=data.get('parent_id'),  # For replies
         author_name=data.get('author_name'),
         author_email=data.get('author_email'),
         content=data.get('content'),
-        user_ip=request.remote_addr,
-        user_agent=request.headers.get('User-Agent', '')
+        user_ip=user_ip,
+        user_agent=user_agent,
+        approved=True  # Auto-approve comments for now
     )
     
     db.session.add(comment)
@@ -1612,14 +1492,17 @@ def reply_to_comment(comment_id):
     parent_comment = BlogComment.query.get_or_404(comment_id)
     data = request.get_json()
     
+    user_ip = request.remote_addr or request.headers.get('X-Forwarded-For', '').split(',')[0]
+    user_agent = request.headers.get('User-Agent', '')
+    
     reply = BlogComment(
         blog_id=parent_comment.blog_id,
         parent_id=comment_id,
         author_name=data.get('author_name', admin_user),
         author_email=data.get('author_email'),
         content=data.get('content'),
-        user_ip=request.remote_addr,
-        user_agent=request.headers.get('User-Agent', ''),
+        user_ip=user_ip,
+        user_agent=user_agent,
         approved=True
     )
     
@@ -1627,6 +1510,58 @@ def reply_to_comment(comment_id):
     db.session.commit()
     
     return jsonify(reply.to_dict()), 201
+
+# Comment Like routes
+@app.route('/api/comments/<int:comment_id>/like', methods=['POST'])
+def like_comment(comment_id):
+    """Like a comment"""
+    comment = BlogComment.query.get_or_404(comment_id)
+    
+    user_ip = request.remote_addr or request.headers.get('X-Forwarded-For', '').split(',')[0]
+    user_agent = request.headers.get('User-Agent', '')
+    
+    # Check if already liked from this IP
+    existing_like = CommentLike.query.filter_by(comment_id=comment_id, user_ip=user_ip).first()
+    if existing_like:
+        # Unlike: remove the like
+        db.session.delete(existing_like)
+        # Update cached count
+        comment.like_count = max(0, (comment.like_count or 0) - 1)
+        db.session.commit()
+        
+        count = CommentLike.query.filter_by(comment_id=comment_id).count()
+        return jsonify({'message': 'Comment unliked', 'liked': False, 'count': count}), 200
+    
+    # Add like
+    like = CommentLike(
+        comment_id=comment_id,
+        user_ip=user_ip,
+        user_agent=user_agent
+    )
+    db.session.add(like)
+    # Update cached count
+    comment.like_count = (comment.like_count or 0) + 1
+    db.session.commit()
+    
+    count = CommentLike.query.filter_by(comment_id=comment_id).count()
+    return jsonify({'message': 'Comment liked', 'liked': True, 'count': count}), 201
+
+@app.route('/api/comments/<int:comment_id>/likes', methods=['GET'])
+def get_comment_likes(comment_id):
+    """Get like count for a comment and check if current user has liked"""
+    comment = BlogComment.query.get_or_404(comment_id)
+    user_ip = request.remote_addr or request.headers.get('X-Forwarded-For', '').split(',')[0]
+    
+    # Use cached count from comment table
+    count = comment.like_count or 0
+    
+    # Check if current user has liked
+    user_liked = False
+    if user_ip:
+        existing_like = CommentLike.query.filter_by(comment_id=comment_id, user_ip=user_ip).first()
+        user_liked = existing_like is not None
+    
+    return jsonify({'count': count, 'liked': user_liked}), 200
 
 @app.route('/api/notifications', methods=['GET'])
 @jwt_required()

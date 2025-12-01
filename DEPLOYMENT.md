@@ -106,14 +106,19 @@ This guide will help you deploy your portfolio website for free.
 - **Note**: On free hosting services, the database file may reset on redeploy
 - **Solution**: Use a persistent volume or upgrade to PostgreSQL
 
-### PostgreSQL (Recommended for Production)
+### PostgreSQL (Supabase - Recommended)
 
-1. **Render**: Create a PostgreSQL database (free tier available)
-2. **Update DATABASE_URL**: `postgresql://user:password@host:port/dbname`
-3. **Install psycopg2**: Add to `requirements.txt`
-   ```
-   psycopg2-binary==2.9.9
-   ```
+1.  **Create Project**: Sign up at [supabase.com](https://supabase.com) and create a new project.
+2.  **Get Connection String**:
+    -   Click **"Connect"** in the top right of your project dashboard.
+    -   Select **"URI"**.
+    -   Copy the string. It looks like: `postgresql://postgres.[ref]:[password]@...`
+    -   Replace `[YOUR-PASSWORD]` with your actual database password.
+3.  **Update Environment**:
+    -   Set `DATABASE_URL` in your Render environment variables.
+    -   Format: `postgresql://user:password@host:port/dbname`
+    -   **Note**: The backend automatically handles the `postgres://` to `postgresql://` conversion required by SQLAlchemy.
+4.  **Dependencies**: `psycopg2-binary` is already added to `requirements.txt`.
 
 ## Complete Deployment Steps
 
