@@ -1,126 +1,101 @@
-# 🔐 Render Environment Variables Setup
+# Render Environment Variable Setup for Supabase
 
-## Generated Secrets
+## ⚠️ IMPORTANT: Use Session Pooler (Not Direct Connection)
 
-Your `.env` file has been created with secure random strings. Here's how to add them to Render:
+Render free tier uses **IPv4 network**, so you **MUST use Session Pooler** connection, not Direct connection.
 
-## Step 1: Get Your Generated Secrets
+## Get Session Pooler Connection String
 
-Your `.env` file in `backend/.env` contains:
-- `SECRET_KEY` - Flask secret key
-- `JWT_SECRET_KEY` - JWT token secret
+1. **Go to Supabase Dashboard**
+   - Navigate to your project
+   - Click **Settings** (gear icon) → **Database**
 
-**⚠️ Important**: The `.env` file is in `.gitignore` and won't be pushed to GitHub. You need to manually copy these values to Render.
+2. **Get Session Pooler Connection String**
+   - Scroll to **"Connection string"** section
+   - Select **"URI"** tab
+   - Under **"Connection pooling"**, select **"Session"** (NOT "Direct")
+   - Copy the connection string
 
-## Step 2: View Your Secrets
+3. **It should look like this:**
+   ```
+   postgresql://postgres.yqmhscbgywfodifkjzku:JpmacMBYfYQcCz1Y@aws-0-ap-southeast-2.pooler.supabase.com:6543/postgres
+   ```
 
-To see your generated secrets, run:
-```bash
-cd backend
-cat .env | grep -E "SECRET_KEY|JWT_SECRET_KEY"
+   **Key points:**
+   - Port: **6543** (not 5432)
+   - Host: **`.pooler.supabase.com`** (not `.supabase.co`)
+   - Username: **`postgres.yqmhscbgywfodifkjzku`** (includes project ref)
+
+## For Render Environment Variable
+
+**Use your Session Pooler connection string (port 6543, pooler hostname)**
+
+**Example format:**
+```
+postgresql://postgres.yqmhscbgywfodifkjzku:JpmacMBYfYQcCz1Y@aws-0-ap-southeast-2.pooler.supabase.com:6543/postgres
 ```
 
-Or open `backend/.env` in your editor.
+**Note:** The code will automatically add `?sslmode=require` to your connection string, so you don't need to add it manually.
 
-## Step 3: Add to Render
+## Steps to Add in Render
 
-1. Go to **Render Dashboard** → Your Service → **Environment**
-2. Click **Add Environment Variable** for each:
+1. **Go to Render Dashboard**
+   - Navigate to your backend service
 
-### Required Variables:
+2. **Open Environment Tab**
+   - Click on your service
+   - Go to **"Environment"** tab in the left sidebar
 
-1. **SECRET_KEY**
-   - Copy from `backend/.env`
-   - Value: `your-generated-secret-key`
+3. **Add/Update DATABASE_URL**
+   - Scroll to **"Environment Variables"** section
+   - Find `DATABASE_URL` or click **"Add Environment Variable"**
+   - **Key:** `DATABASE_URL`
+   - **Value:** `postgresql://postgres:JpmacMBYfYQcCz1Y@db.yqmhscbgywfodifkjzku.supabase.co:5432/postgres`
+   - **IMPORTANT:** 
+     - No spaces before or after the `=`
+     - No quotes around the value
+     - Copy exactly as shown above
 
-2. **JWT_SECRET_KEY**
-   - Copy from `backend/.env`
-   - Value: `your-generated-jwt-secret-key`
+4. **Save Changes**
+   - Click **"Save Changes"** button
+   - Render will automatically redeploy your service
 
-3. **FLASK_ENV**
-   - Value: `production`
+## Important Notes
 
-4. **ADMIN_USERNAME**
-   - Value: `admin` (or your choice)
+✅ **What's Correct for Session Pooler:**
+- Protocol: `postgresql://` (not `postgres://`)
+- Host: `aws-0-region.pooler.supabase.com` (Session Pooler - works with IPv4)
+- Port: `6543` (Session Pooler port)
+- Username: `postgres.yqmhscbgywfodifkjzku` (includes project reference)
+- Database: `postgres`
 
-5. **ADMIN_PASSWORD**
-   - Value: `your-secure-password` (change from default!)
+❌ **Don't use Direct Connection:**
+- Direct connection uses IPv6 which doesn't work on Render free tier
+- Use Session Pooler instead
 
-6. **DATABASE_URL**
-   - Value: `sqlite:///portfolio.db`
+✅ **The code will automatically:**
+- Add SSL requirement (`?sslmode=require`)
+- Handle the connection properly
 
-7. **PORT**
-   - Value: `10000` (Render sets this automatically, but good to have)
+⚠️ **Before Setting Up:**
+1. Make sure your Supabase project is **ACTIVE** (not paused)
+2. Go to Supabase dashboard and check project status
+3. If paused, click "Restore" and wait 1-2 minutes
 
-8. **CORS_ORIGINS**
-   - Value: `https://your-frontend.vercel.app` (update after frontend deployment)
+## Verify Connection String
 
-### Optional Variables:
+After saving, check Render logs. You should see:
+- ✅ `Database connection successful!` 
+- ✅ `Database tables created/verified successfully`
 
-9. **MAIL_SERVER** (if using email)
-   - Value: `smtp.gmail.com`
+If you see errors, check:
+1. Supabase project is active (not paused)
+2. Connection string has no extra spaces
+3. Password is correct
 
-10. **MAIL_PORT**
-    - Value: `587`
+## Security Note
 
-11. **MAIL_USE_TLS**
-    - Value: `True`
-
-12. **MAIL_USERNAME**
-    - Value: `your-email@gmail.com`
-
-13. **MAIL_PASSWORD**
-    - Value: `your-gmail-app-password`
-
-14. **MAIL_DEFAULT_SENDER**
-    - Value: `your-email@gmail.com`
-
-15. **ADMIN_EMAIL**
-    - Value: `your-email@gmail.com`
-
-16. **GITHUB_TOKEN** (if using GitHub integration)
-    - Value: `your-github-personal-access-token`
-
-## Quick Copy Script
-
-Run this to display your secrets for easy copying:
-
-```bash
-cd backend
-echo "=== Copy these to Render ==="
-echo ""
-grep "SECRET_KEY" .env
-grep "JWT_SECRET_KEY" .env
-echo ""
-echo "=== End ==="
-```
-
-## Security Notes
-
-- ✅ `.env` is in `.gitignore` - won't be committed
-- ✅ Secrets are generated using `secrets.token_urlsafe(32)` - cryptographically secure
-- ⚠️ Never commit `.env` to GitHub
-- ⚠️ Change `ADMIN_PASSWORD` from default
-- ⚠️ Keep secrets private
-
-## After Adding to Render
-
-1. Save all environment variables
-2. Render will automatically redeploy
-3. Check logs to verify database initialization
-4. Test your API: `https://your-backend.onrender.com/api/health`
-
-## Troubleshooting
-
-### Secrets not working?
-- Verify you copied the entire string (no spaces, no quotes)
-- Check for typos
-- Ensure variable names match exactly (case-sensitive)
-
-### Need to regenerate?
-```bash
-cd backend
-python3 -c "import secrets; print('SECRET_KEY=' + secrets.token_urlsafe(32))"
-python3 -c "import secrets; print('JWT_SECRET_KEY=' + secrets.token_urlsafe(32))"
-```
-
+⚠️ **Never commit this connection string to Git!**
+- It contains your database password
+- Keep it only in Render environment variables
+- The `.env` file is in `.gitignore` for local development

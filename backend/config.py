@@ -19,8 +19,7 @@ class Config:
         if _db_url.startswith('postgres://'):
             _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
         
-        # Ensure SSL is required for Supabase direct connections
-        # Direct connections use port 5432 and require SSL
+        # Configure Supabase connection (supports both direct and pooler connections)
         if 'supabase.co' in _db_url or 'supabase.com' in _db_url:
             from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
             parsed = urlparse(_db_url)
@@ -30,7 +29,18 @@ class Config:
             if 'sslmode' not in query_params:
                 query_params['sslmode'] = ['require']
             
-            # Reconstruct URL with SSL parameter
+            # Add pgbouncer mode for Session Pooler connections
+            # Session Pooler is required for IPv4 networks (like Render free tier)
+            if '.pooler.supabase.com' in _db_url or ':6543' in _db_url:
+                # For Session Pooler, use transaction mode to avoid connection issues
+                if 'pgbouncer' not in query_params:
+                    query_params['pgbouncer'] = ['true']
+            
+            # Add connection parameters
+            if 'connect_timeout' not in query_params:
+                query_params['connect_timeout'] = ['10']
+            
+            # Reconstruct URL with parameters
             new_query = urlencode(query_params, doseq=True)
             _db_url = urlunparse(parsed._replace(query=new_query))
         
