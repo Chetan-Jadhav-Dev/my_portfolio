@@ -17,6 +17,21 @@ app.config.from_object(Config)
 # Initialize extensions
 db.init_app(app)
 
+# Configure engine for Supabase Session Pooler (pgBouncer)
+# Session Pooler requires specific engine configuration
+_db_url = app.config.get('SQLALCHEMY_DATABASE_URI', '')
+is_pooler = '.pooler.supabase.com' in _db_url or ':6543' in _db_url
+
+if is_pooler and hasattr(db, 'engine'):
+    # Configure engine settings for pgBouncer/Session Pooler
+    # These settings are required for proper connection handling
+    from sqlalchemy import event
+    
+    @event.listens_for(db.engine, "connect")
+    def configure_pooler_connection(dbapi_conn, connection_record):
+        """Configure connection for pgBouncer - settings are handled via URL"""
+        pass
+
 jwt = JWTManager(app)
 mail = Mail(app)
 CORS(app, origins=app.config['CORS_ORIGINS'])

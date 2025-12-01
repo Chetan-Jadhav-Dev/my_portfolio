@@ -2,20 +2,27 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 
-# Engine options for PostgreSQL connections (Supabase direct connection)
-engine_options = {}
-if os.environ.get('DATABASE_URL') and ('postgresql://' in os.environ.get('DATABASE_URL', '') or 'postgres://' in os.environ.get('DATABASE_URL', '')):
+# Check if using Supabase Session Pooler (pgBouncer)
+# Configure engine options properly for pgBouncer connections
+_db_url = os.environ.get('DATABASE_URL', '')
+is_pooler = '.pooler.supabase.com' in _db_url or ':6543' in _db_url
+
+if is_pooler:
+    # Engine options for pgBouncer/Session Pooler
+    # These are required for proper connection handling
     engine_options = {
         'pool_pre_ping': True,      # Verify connections before using
-        'pool_recycle': 300,        # Recycle connections after 5 minutes
-        'pool_size': 5,             # Maintain 5 connections in pool
-        'max_overflow': 10,         # Allow up to 10 additional connections
+        'pool_recycle': 1800,       # 30 minutes - required for pgBouncer
+        'pool_size': 5,
+        'max_overflow': 10,
         'connect_args': {
-            'connect_timeout': 10,  # 10 second connection timeout
+            'sslmode': 'require',
+            'connect_timeout': 10,
         }
     }
-
-db = SQLAlchemy(engine_options=engine_options if engine_options else None)
+    db = SQLAlchemy(engine_options=engine_options)
+else:
+    db = SQLAlchemy()
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)

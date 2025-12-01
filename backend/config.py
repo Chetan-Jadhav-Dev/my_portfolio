@@ -25,24 +25,25 @@ class Config:
             parsed = urlparse(_db_url)
             query_params = parse_qs(parsed.query)
             
+            # Clean up connection string - remove invalid parameters
+            # Remove any pgbouncer-related parameters (not valid PostgreSQL options)
+            query_params.pop('pgbouncer', None)
+            query_params.pop('pooler', None)
+            
             # Add SSL mode if not present (required for Supabase)
             if 'sslmode' not in query_params:
                 query_params['sslmode'] = ['require']
             
-            # Add pgbouncer mode for Session Pooler connections
-            # Session Pooler is required for IPv4 networks (like Render free tier)
-            if '.pooler.supabase.com' in _db_url or ':6543' in _db_url:
-                # For Session Pooler, use transaction mode to avoid connection issues
-                if 'pgbouncer' not in query_params:
-                    query_params['pgbouncer'] = ['true']
-            
-            # Add connection parameters
-            if 'connect_timeout' not in query_params:
-                query_params['connect_timeout'] = ['10']
-            
-            # Reconstruct URL with parameters
+            # Reconstruct URL with clean parameters
             new_query = urlencode(query_params, doseq=True)
             _db_url = urlunparse(parsed._replace(query=new_query))
+            
+            # For Session Pooler connections, use psycopg3 driver for better pgBouncer support
+            # psycopg3 (psycopg) handles SCRAM authentication better with pgBouncer
+            if '.pooler.supabase.com' in _db_url or ':6543' in _db_url:
+                # Change driver from default (psycopg2) to psycopg3
+                if _db_url.startswith('postgresql://'):
+                    _db_url = _db_url.replace('postgresql://', 'postgresql+psycopg://', 1)
         
     SQLALCHEMY_DATABASE_URI = _db_url or f'sqlite:///{_db_path}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
