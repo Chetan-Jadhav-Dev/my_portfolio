@@ -380,10 +380,34 @@ INSERT INTO target_table SELECT * FROM source WHERE date = '2023-10-27';</code><
 
 # Initialize database
 with app.app_context():
-    db.create_all()
-    # Auto-initialize with sample data if database is empty
-    # Set AUTO_INIT_DB=false in environment variables to disable
-    initialize_database()
+    try:
+        # Try to create tables - this will test the connection
+        db.create_all()
+        print("✅ Database tables created/verified successfully")
+        
+        # Auto-initialize with sample data if database is empty
+        # Set AUTO_INIT_DB=false in environment variables to disable
+        initialize_database()
+    except Exception as e:
+        db_url = app.config.get('SQLALCHEMY_DATABASE_URI', 'Not set')
+        # Don't print full URL for security
+        db_preview = db_url.split('@')[-1] if '@' in db_url else 'Not configured'
+        
+        print("=" * 60)
+        print("⚠️  WARNING: Database connection failed during startup")
+        print(f"   Error: {type(e).__name__}")
+        print(f"   Database host: {db_preview}")
+        print("=" * 60)
+        print("This could mean:")
+        print("  1. Database is not accessible (check Supabase project status)")
+        print("  2. Connection string is incorrect")
+        print("  3. Database is paused (Supabase free tier pauses after inactivity)")
+        print("  4. Network connectivity issues")
+        print("=" * 60)
+        print("The app will continue to run, but database operations will fail.")
+        print("Please check your DATABASE_URL environment variable and Supabase status.")
+        print("=" * 60)
+        # Don't crash - let the app start and handle connection errors gracefully
 
 # Helper function to log admin activities
 def log_activity(action, entity_type, entity_id=None, entity_name=None, admin_user=None, data_snapshot=None):
