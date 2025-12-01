@@ -1,7 +1,21 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
 
-db = SQLAlchemy()
+# Engine options for PostgreSQL connections (Supabase direct connection)
+engine_options = {}
+if os.environ.get('DATABASE_URL') and ('postgresql://' in os.environ.get('DATABASE_URL', '') or 'postgres://' in os.environ.get('DATABASE_URL', '')):
+    engine_options = {
+        'pool_pre_ping': True,      # Verify connections before using
+        'pool_recycle': 300,        # Recycle connections after 5 minutes
+        'pool_size': 5,             # Maintain 5 connections in pool
+        'max_overflow': 10,         # Allow up to 10 additional connections
+        'connect_args': {
+            'connect_timeout': 10,  # 10 second connection timeout
+        }
+    }
+
+db = SQLAlchemy(engine_options=engine_options if engine_options else None)
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)

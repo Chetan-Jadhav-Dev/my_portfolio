@@ -36,21 +36,6 @@ class Config:
         
     SQLALCHEMY_DATABASE_URI = _db_url or f'sqlite:///{_db_path}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
-    # Connection pool settings optimized for direct connections
-    # Direct connections can handle more connections than pooler
-    if _db_url and ('postgresql://' in _db_url or 'postgres://' in _db_url):
-        SQLALCHEMY_ENGINE_OPTIONS = {
-            'pool_pre_ping': True,      # Verify connections before using
-            'pool_recycle': 300,        # Recycle connections after 5 minutes
-            'pool_size': 5,             # Maintain 5 connections in pool
-            'max_overflow': 10,         # Allow up to 10 additional connections
-            'connect_args': {
-                'connect_timeout': 10,  # 10 second connection timeout
-            }
-        }
-    else:
-        SQLALCHEMY_ENGINE_OPTIONS = {}
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-key-change-in-production'
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'admin123'
