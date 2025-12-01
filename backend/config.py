@@ -11,13 +11,46 @@ class Config:
     # Ensure instance directory exists
     os.makedirs(os.path.dirname(_db_path), exist_ok=True)
     
-    # Handle Supabase/Render PostgreSQL URL format (SQLAlchemy requires postgresql://)
+    # Handle Supabase Direct Connection (PostgreSQL)
+    # SQLAlchemy requires postgresql:// (not postgres://)
     _db_url = os.environ.get('DATABASE_URL')
-    if _db_url and _db_url.startswith('postgres://'):
-        _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+    if _db_url:
+        # Convert postgres:// to postgresql:// (required by SQLAlchemy)
+        if _db_url.startswith('postgres://'):
+            _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+        
+        # Ensure SSL is required for Supabase direct connections
+        # Direct connections use port 5432 and require SSL
+        if 'supabase.co' in _db_url or 'supabase.com' in _db_url:
+            from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
+            parsed = urlparse(_db_url)
+            query_params = parse_qs(parsed.query)
+            
+            # Add SSL mode if not present (required for Supabase)
+            if 'sslmode' not in query_params:
+                query_params['sslmode'] = ['require']
+            
+            # Reconstruct URL with SSL parameter
+            new_query = urlencode(query_params, doseq=True)
+            _db_url = urlunparse(parsed._replace(query=new_query))
         
     SQLALCHEMY_DATABASE_URI = _db_url or f'sqlite:///{_db_path}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # Connection pool settings optimized for direct connections
+    # Direct connections can handle more connections than pooler
+    if _db_url and ('postgresql://' in _db_url or 'postgres://' in _db_url):
+        SQLALCHEMY_ENGINE_OPTIONS = {
+            'pool_pre_ping': True,      # Verify connections before using
+            'pool_recycle': 300,        # Recycle connections after 5 minutes
+            'pool_size': 5,             # Maintain 5 connections in pool
+            'max_overflow': 10,         # Allow up to 10 additional connections
+            'connect_args': {
+                'connect_timeout': 10,  # 10 second connection timeout
+            }
+        }
+    else:
+        SQLALCHEMY_ENGINE_OPTIONS = {}
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'jwt-secret-key-change-in-production'
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'admin123'

@@ -15,7 +15,13 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # Initialize extensions
-db.init_app(app)
+# Apply engine options for PostgreSQL if configured
+engine_options = app.config.get('SQLALCHEMY_ENGINE_OPTIONS', {})
+if engine_options:
+    db.init_app(app, engine_options=engine_options)
+else:
+    db.init_app(app)
+
 jwt = JWTManager(app)
 mail = Mail(app)
 CORS(app, origins=app.config['CORS_ORIGINS'])
