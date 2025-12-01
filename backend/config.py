@@ -13,40 +13,8 @@ class Config:
     
     # Handle Supabase/Render PostgreSQL URL format (SQLAlchemy requires postgresql://)
     _db_url = os.environ.get('DATABASE_URL')
-    if _db_url:
-        # Convert postgres:// to postgresql:// (required by SQLAlchemy)
-        if _db_url.startswith('postgres://'):
-            _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
-        
-        # Fix Supabase pooler connection to avoid "duplicate SASL authentication" error
-        # The pooler (port 6543) can cause issues - automatically convert to direct connection
-        if '.pooler.supabase.com' in _db_url or ':6543' in _db_url:
-            from urllib.parse import urlparse, urlunparse
-            try:
-                parsed = urlparse(_db_url)
-                
-                # Convert pooler hostname to direct hostname
-                if '.pooler.supabase.com' in parsed.hostname:
-                    new_hostname = parsed.hostname.replace('.pooler.supabase.com', '.supabase.co')
-                    new_port = 5432  # Use direct connection port
-                    
-                    # Reconstruct netloc with new hostname and port
-                    auth_part = f"{parsed.username}:{parsed.password}@" if parsed.username else ""
-                    new_netloc = f"{auth_part}{new_hostname}:{new_port}"
-                    
-                    # Rebuild URL
-                    _db_url = urlunparse((
-                        parsed.scheme,
-                        new_netloc,
-                        parsed.path,
-                        parsed.params,
-                        parsed.query if 'sslmode' in parsed.query else parsed.query + ('&' if parsed.query else '') + 'sslmode=require',
-                        parsed.fragment
-                    ))
-                    print(f"✅ Converted Supabase pooler connection to direct connection")
-            except Exception as e:
-                print(f"⚠️  Warning: Could not automatically convert pooler URL: {e}")
-                print(f"   Please use direct connection (port 5432) from Supabase dashboard")
+    if _db_url and _db_url.startswith('postgres://'):
+        _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
         
     SQLALCHEMY_DATABASE_URI = _db_url or f'sqlite:///{_db_path}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
